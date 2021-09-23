@@ -33,7 +33,7 @@ class K8sClusterTest(unittest.TestCase):
     """Test that nodes of a cluster are correctly listed."""
 
     # Create and assign mocks
-    mock_nodes = k8s_mocks.MakeMockNodes(5)
+    mock_nodes = k8s_mocks.V1NodeList(5)
     mock_k8s_api_func = mock_k8s_api.return_value.list_node
     mock_k8s_api_func.return_value = mock_nodes
 
@@ -53,7 +53,7 @@ class K8sClusterTest(unittest.TestCase):
     """Test that pods of a cluster are correctly listed."""
 
     # Create and assign mocks
-    mock_pods = k8s_mocks.MakeMockNodes(5)
+    mock_pods = k8s_mocks.V1PodList(5)
     mock_k8s_api_func = mock_k8s_api.return_value.list_pod_for_all_namespaces
     mock_k8s_api_func.return_value = mock_pods
 
@@ -74,7 +74,7 @@ class K8sClusterTest(unittest.TestCase):
 
     # Create and assign mocks
     mock_namespace = mock.Mock()
-    mock_pods = k8s_mocks.MakeMockNodes(5)
+    mock_pods = k8s_mocks.V1PodList(5)
     mock_k8s_api_func = mock_k8s_api.return_value.list_namespaced_pod
     mock_k8s_api_func.return_value = mock_pods
 
@@ -99,7 +99,7 @@ class K8sNodeTest(unittest.TestCase):
     """Test that pods on a node are correctly listed."""
 
     # Create and assign mocks
-    mock_pods = k8s_mocks.MakeMockNodes(5)
+    mock_pods = k8s_mocks.V1PodList(5)
     mock_k8s_api_func = mock_k8s_api.return_value.list_pod_for_all_namespaces
     mock_k8s_api_func.return_value = mock_pods
 
@@ -124,8 +124,10 @@ class K8sPodTest(unittest.TestCase):
   @mock.patch('kubernetes.client.CoreV1Api')
   def testPodGetNode(self, mock_k8s_api):
     """Test that the returned node of a pod is correct."""
-    mock_pod = k8s_mocks.MakeMockPod(
-        'fake-pod-name', 'fake-namespace', 'fake-node-name')
+    mock_pod = k8s_mocks.V1Pod(
+        name='fake-pod-name',
+        namespace='fake-namespace',
+        node_name='fake-node-name')
     mock_k8s_api_func = mock_k8s_api.return_value.read_namespaced_pod
     mock_k8s_api_func.return_value = mock_pod
 
